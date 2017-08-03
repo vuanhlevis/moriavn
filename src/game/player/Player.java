@@ -3,6 +3,7 @@ package game.player;
 import game.Utils;
 import game.base.GameObject;
 import game.base.Mathx;
+import game.base.Settings;
 import game.base.Vector2D;
 import game.base.inputs.InputManager;
 import game.base.physics.BoxCollider;
@@ -42,17 +43,32 @@ public class Player extends GameObject implements PhysicsBody {
         this.velocity.y += gravity;
 
         this.velocity.x = 0;
+        System.out.println(this.boxCollider);
 
         if (InputManager.instance.leftPressed && alive) {
-            this.velocity.x -= 5;
+            if (this.position.x > 0)
+                this.velocity.x -= 5;
+            if (this.position.x <= Settings.GAMEPLAY_WIDTH/4)
+            {
+                GameObject.setAll(+5);
+
+            }
+
+
         }
 
         if (InputManager.instance.rightPressed && alive) {
+            if (this.position.x < Settings.GAMEPLAY_WIDTH)
             this.velocity.x += 5;
+            if (this.position.x >= Settings.GAMEPLAY_WIDTH/2)
+            {
+                GameObject.setAll(-5);
+            }
+
         }
 
         if (InputManager.instance.upPressed && alive) {
-            if (Physics.bodyInRect(position.add(0, 1 ), boxCollider.width, boxCollider.height, Brick.class) != null)
+            if (Physics.bodyInRect(position.add(0, 1), boxCollider.width, boxCollider.height, Brick.class) != null)
                 this.velocity.y -= 20;
         }
 

@@ -1,5 +1,6 @@
 package game;
 
+
 import game.base.GameObject;
 import game.base.GameObjectPool;
 import game.base.Settings;
@@ -7,8 +8,10 @@ import game.base.inputs.InputManager;
 import game.base.platforms.Brick;
 import game.base.platforms.Stone;
 import game.base.renderer.ImageRenderer;
+import game.camera.Camera;
 import game.enemy.Enemy;
 import game.player.Player;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,10 +41,12 @@ public class GameWindow extends JFrame{
         addStone();
         addEnemy();
         addPlayer();
-
         setupStartupScene();
         this.setVisible(true);
     }
+
+
+
 
     private void addEnemy() {
         Enemy enemy = GameObjectPool.recycle(Enemy.class);
@@ -56,7 +61,7 @@ public class GameWindow extends JFrame{
 
 
     private void addBrick() {
-        for(int i = 0, platformX = 10; i < 20; i++, platformX += 30) {
+        for(int i = 0, platformX = 10; i < 40; i++, platformX += 30) {
             Brick brick = GameObjectPool.recycle(Brick.class);
             brick.position.set(platformX, 485);
 
@@ -64,8 +69,9 @@ public class GameWindow extends JFrame{
 
         addPlatform(130, Settings.GAMEPLAY_HEIGHT - 100);
         addPlatform(130, 300 - 30 * 2);
-        addPlatform(60, 150);
+
         addPlatform(400, 400);
+
 
     }
 
