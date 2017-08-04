@@ -8,6 +8,7 @@ import game.base.platforms.Brick;
 import game.base.platforms.Stone;
 import game.base.renderer.ImageRenderer;
 import game.enemy.Enemy;
+import game.enemy.EnemyTurtle;
 import game.player.Player;
 
 import javax.swing.*;
@@ -35,7 +36,6 @@ public class GameWindow extends JFrame{
         setupBackBuffer();
         setupInputs();
         addBrick();
-        addStone();
         addEnemy();
         addPlayer();
 
@@ -46,13 +46,10 @@ public class GameWindow extends JFrame{
     private void addEnemy() {
         Enemy enemy = GameObjectPool.recycle(Enemy.class);
         enemy.position.set(400, 150);
+        EnemyTurtle enemyTurtle = GameObjectPool.recycle(EnemyTurtle.class);
+        enemyTurtle.position.set(600,150);
     }
 
-    private void addStone() {
-        Stone stone = new Stone();
-        stone.position.set(60,Settings.GAMEPLAY_HEIGHT - 100);
-        GameObject.add(stone);
-    }
 
 
     private void addBrick() {

@@ -18,7 +18,6 @@ import game.player.Player;
 public class Enemy extends GameObject implements PhysicsBody {
     Vector2D velocity;
     BoxCollider boxCollider;
-    private float gravity = 2f;
 
     public Enemy() {
         super();
@@ -33,7 +32,7 @@ public class Enemy extends GameObject implements PhysicsBody {
         super.run(parentPosition);
         hitPlayer();
         velocity.x = -1;
-        this.velocity.y +=  gravity;
+        this.velocity.y +=  Player.gravity;
         PhysicsBody body = Physics.bodyInRect(position.add(0, velocity.y), boxCollider.width, boxCollider.height, Brick.class);
         if (body != null) {
             float detalY = Mathx.sign(velocity.y);
@@ -44,8 +43,24 @@ public class Enemy extends GameObject implements PhysicsBody {
             this.velocity.y = 0;
         }
         this.position.addUp(velocity);
+        moveHorizontal();
+
 
     }
+
+    private void moveHorizontal() {
+        if (isActive) {
+            PhysicsBody body = Physics.bodyInRect(position.add(velocity.x, 0), boxCollider.width, boxCollider.height, Brick.class);
+            if (body != null) {
+                float deltaX = Mathx.sign(velocity.x);
+                while (Physics.bodyInRect(position.add(deltaX, 0), boxCollider.width, boxCollider.height, Brick.class) == null) {
+                    position.addUp(deltaX, 0);
+                }
+                this.velocity.x = 0;
+            }
+        }
+    }
+
 
     private void hitPlayer() {
         Player player = Physics.bodyInRect(this.boxCollider,Player.class);
@@ -53,11 +68,8 @@ public class Enemy extends GameObject implements PhysicsBody {
                 && player.alive && player.screenPosition.x - this.boxCollider.screenPosition.x < 30) {
             this.isActive = false;
 //
-//            this.velocity.y = 0;
             player.velocity.set(0,-15);
 
-            System.out.println(this.boxCollider);
-            System.out.println(player.getBoxCollider());
         }
         else if (player!= null) {
             if (player.alive) {
