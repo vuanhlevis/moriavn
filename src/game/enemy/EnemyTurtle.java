@@ -1,10 +1,8 @@
 package game.enemy;
 
 import game.Utils;
-import game.base.GameObject;
-import game.base.GameObjectPool;
-import game.base.Mathx;
-import game.base.Vector2D;
+import game.base.*;
+import game.base.actions.WaitAction;
 import game.base.physics.BoxCollider;
 import game.base.physics.Physics;
 import game.base.physics.PhysicsBody;
@@ -20,7 +18,9 @@ import javax.swing.*;
 public class EnemyTurtle extends GameObject implements PhysicsBody {
     Vector2D velocity;
     boolean stay;
+    boolean touch;
     BoxCollider boxCollider;
+    WaitAction waitAction;
 
     public EnemyTurtle() {
         super();
@@ -29,7 +29,9 @@ public class EnemyTurtle extends GameObject implements PhysicsBody {
         this.children.add(boxCollider);
         this.velocity = new Vector2D();
         this.stay = false;
+        this.touch = false;
         this.velocity.x = -1;
+        this.waitAction = new WaitAction(17);
     }
 
     @Override
@@ -48,7 +50,6 @@ public class EnemyTurtle extends GameObject implements PhysicsBody {
         }
         this.position.addUp(velocity);
         moveHorizontal();
-
 
     }
 
@@ -70,44 +71,47 @@ public class EnemyTurtle extends GameObject implements PhysicsBody {
         Player player = Physics.bodyInRect(this.boxCollider, Player.class);
 
         if (player!=null) {
-            if (player.getBoxCollider().screenPosition.y + 15 < this.boxCollider.screenPosition.y
+            if (player.getBoxCollider().screenPosition.y < this.boxCollider.screenPosition.y
                     && player.alive && player.screenPosition.x - this.boxCollider.screenPosition.x < 30 && !stay) {
                 this.stay = true;
-
-                player.velocity.set(0, -15);
+                this.touch = true;
+                player.velocity.set(0, -20);
                 this.velocity.set(0, 0);
             } else {
                 if (player.alive && !stay) {
                     player.position.addUp(0, -30);
                     player.velocity.set(0, -15);
                     player.alive = false;
+                    this.touch = true;
                 }
             }
         }
-            if (player != null) {
-                if (player.getBoxCollider().screenPosition.x < this.boxCollider.screenPosition.x && player.alive  && stay) {
-                    this.stay = false;
+        if (touch) {
+            if (waitAction.run(this)) {
+                if (player != null ) {
+                    if (player.getBoxCollider().screenPosition.x < this.boxCollider.screenPosition.x && player.alive  && stay) {
+                        this.stay = false;
 
-                    player.velocity.set(0, -5);
-                    this.velocity.set(5, 0);
-                }
-                else if (player.getBoxCollider().screenPosition.x >= this.boxCollider.screenPosition.x && player.alive  && stay) {
-                    this.stay = false;
+                        player.velocity.set(0, -5);
+                        this.velocity.set(5, 0);
+                    }
+                    else if (player.getBoxCollider().screenPosition.x >= this.boxCollider.screenPosition.x && player.alive  && stay) {
+                        this.stay = false;
 
-                    player.velocity.set(0, -5);
-                    this.velocity.set(-5, 0);
-                }
-                else
+                        player.velocity.set(0, -5);
+                        this.velocity.set(-5, 0);
+                    }
+                    else
                     if (!stay) {
                         player.position.addUp(0, -30);
                         player.velocity.set(0, -15);
                         player.alive = false;
                     }
+                }
             }
-
         }
-
-//    }
+        
+    }
 
 
     @Override

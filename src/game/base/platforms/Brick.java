@@ -6,6 +6,7 @@ import game.base.physics.BoxCollider;
 import game.base.physics.Physics;
 import game.base.physics.PhysicsBody;
 import game.base.renderer.ImageRenderer;
+import javafx.application.Platform;
 
 import javax.swing.*;
 
@@ -13,6 +14,7 @@ import javax.swing.*;
  * Created by levua on 8/3/2017.
  */
 public class Brick extends GameObject implements PhysicsBody {
+
     private BoxCollider boxCollider;
 
     public Brick() {
