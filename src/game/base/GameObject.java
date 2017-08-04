@@ -128,9 +128,14 @@ public class GameObject {
     public void setActive(boolean active) {
         this.isActive = active;
     }
+<<<<<<< HEAD
     public static void setAll(int dx){
         for (GameObject gameObject:gameObjects) {
             gameObject.position.x += dx;
         }
     }
+=======
+
+
+>>>>>>> f0bc0b0aa330ec98a3d58d2e8accb6e71899feff
 }

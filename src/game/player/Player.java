@@ -13,6 +13,7 @@ import game.base.platforms.Brick;
 import game.base.platforms.Stone;
 import game.base.renderer.ImageRenderer;
 import game.enemy.Enemy;
+import game.enemy.EnemyTurtle;
 
 /**
  * Created by levua on 8/3/2017.
@@ -93,6 +94,17 @@ public class Player extends GameObject implements PhysicsBody {
                 this.velocity.y = 0;
             }
         }
+        if (alive) {
+            PhysicsBody body = Physics.bodyInRect(position.add(0, velocity.y), boxCollider.width, boxCollider.height, EnemyTurtle.class);
+            if (body != null) {
+                float detalY = Mathx.sign(velocity.y);
+                while (Physics.bodyInRect(position.add(0, detalY), boxCollider.width, boxCollider.height, EnemyTurtle.class) == null) {
+                    position.addUp(0, detalY);
+                }
+
+                this.velocity.y = 0;
+            }
+        }
     }
 
 
@@ -124,6 +136,7 @@ public class Player extends GameObject implements PhysicsBody {
         }
 
     }
+
 
     @Override
     public BoxCollider getBoxCollider() {
